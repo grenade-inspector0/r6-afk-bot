@@ -23,3 +23,4 @@ Press F2 to start/stop the bot.
 If you get banned, it's your fault. Get owned. Loser. 
 
 # SUBSCRIBE ALREADY
+youtube.com/verybannable
