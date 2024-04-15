@@ -1,22 +1,20 @@
+"""Mouse and keyboard functions"""
+
 import time
+import ctypes
 import pydirectinput
 import keyboard
-import ctypes
+from afk import ActiveManager
 import screen
 
 win32 = ctypes.windll.user32
 
 # delay between press and release
-global KEYDELAY
 KEYDELAY = 0.1
 
-def __action(active: bool, fn, **kwargs):
-    if not screen.gameInFocus():
-        print("Game not in focus.")
-        return
-
-    if active and screen.gameInFocus():
-        fn(**kwargs)
+def __action(active: ActiveManager, function, **kwargs):
+    if active.is_active():
+        function(**kwargs)
 
 def click(active, **kwargs):
     """ Clicks mouse at current postion or at provided x and y.
@@ -29,9 +27,8 @@ def __click(**kwargs):
     y = kwargs.get('y')
 
     if x is not None and y is not None:
-        pydirectinput.moveTo(screen.getResScaleX(x), screen.getResScaleY(y))
+        pydirectinput.moveTo(screen.get_res_scale_x(x), screen.get_res_scale_y(y))
 
-    global KEYDELAY
     win32.mouse_event(0x0002, 0, 0, 0, 0) # Left click press
     time.sleep(KEYDELAY)
     win32.mouse_event(0x0004, 0, 0, 0, 0) # Left click release
@@ -46,22 +43,18 @@ def __keypress(**kwargs):
     key = kwargs.get('key')
 
     if key is not None:
-        global KEYDELAY
         keyboard.press(key)
         time.sleep(KEYDELAY)
         keyboard.release(key)
 
 def send_text(active, **kwargs):
-    """Sends text
-    """
+    """Sends text"""
     __action(active, __send_text, **kwargs)
 
 def __send_text(**kwargs):
     text = kwargs.get('text')
 
     if text is not None:
-        global KEYDELAY
-
         keyboard.press("t")
         time.sleep(KEYDELAY)
         keyboard.release("t")
@@ -76,15 +69,15 @@ def __send_text(**kwargs):
         time.sleep(KEYDELAY)
         keyboard.release("enter")
 
-def moveMouse(active, **kwargs):
-    __action(active, __moveMouse, **kwargs)
+def move_mouse(active, **kwargs):
+    """Move mouse"""
+    __action(active, __move_mouse, **kwargs)
 
-def __moveMouse(**kwargs):
+def __move_mouse(**kwargs):
     x = kwargs.get('x')
     y = kwargs.get('y')
 
-    global KEYDELAY
     time.sleep(KEYDELAY)
 
     if x is not None and y is not None:
-        pydirectinput.moveTo(screen.getResScaleX(x), screen.getResScaleY(y))
+        pydirectinput.moveTo(screen.get_res_scale_x(x), screen.get_res_scale_y(y))
