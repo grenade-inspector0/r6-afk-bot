@@ -14,7 +14,7 @@ pyinstaller.run([
             '--clean',
             # '--uac-admin',
             '--console',
-            os.path.join(DIRECTORY, 'src/afk.py'),
+            os.path.join(DIRECTORY, 'src/main.py'),
         ])
 
 # cleanup

@@ -10,3 +10,6 @@ dist/
 
 # Recorded inputs
 tools/recordings
+
+#Config file
+config.json

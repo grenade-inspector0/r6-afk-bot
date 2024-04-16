@@ -6,7 +6,6 @@ from PIL import Image
 import cv2
 from mss import mss
 import numpy
-import mnk
 
 win32 = ctypes.windll.user32
 win32.SetProcessDPIAware()
@@ -56,7 +55,7 @@ def __search_image(image, region, screen):
     res = cv2.matchTemplate(img_cv[region[1]:region[3], region[0]:region[2]], image, cv2.TM_CCOEFF_NORMED)
     return (res >= 0.8).any()
 
-def scrape(active):
+def scrape(active, mnk):
     if not active.is_active():
         time.sleep(1)
         return
@@ -64,37 +63,37 @@ def scrape(active):
     screen = __capture_screenshot()
 
     if __search_image(play_again, convert_region(350, 150, 650, 200), screen):
-        print('pressing play_again.')
+        # print('pressing play_again.')
         mnk.click(active, x=500,y=225)
         time.sleep(5)
         return
 
     if __search_image(play_again_highlighted, convert_region(340, 135, 680, 185), screen):
-        print('pressing play_again_highlighted.')
+        # print('pressing play_again_highlighted.')
         mnk.click(active, x=500,y=225)
         time.sleep(5)
         return
 
     if __search_image(reconnect, convert_region(350, 150, 650, 200), screen):
-        print('pressing reconnect.')
+        # print('pressing reconnect.')
         mnk.click(active, x=500,y=225)
         time.sleep(5)
         return
 
     if __search_image(reconnect_highlighted, convert_region(340, 135, 680, 185), screen):
-        print('pressing reconnect_highlighted.')
+        # print('pressing reconnect_highlighted.')
         mnk.click(active, x=500,y=225)
         time.sleep(5)
         return
 
     if __search_image(popup_message_highlighted, convert_region(640, 900, 1290, 1000), screen):
-        print('pressing popup_message_highlighted.')
+        # print('pressing popup_message_highlighted.')
         mnk.click(active, x=950,y=950)
         time.sleep(1)
         return
 
     if __search_image(commend, convert_region(1140, 880, 1500, 980), screen):
-        print('pressing commend.')
+        # print('pressing commend.')
         mnk.click(active, x=1330,y=930)
         time.sleep(0.5)
         mnk.click(active, x=950,y=930)
@@ -106,13 +105,13 @@ def scrape(active):
         return
 
     if __search_image(find_another_match, convert_region(1170, 930, 1490, 1070), screen):
-        print('pressing find_another_match.')
+        # print('pressing find_another_match.')
         mnk.click(active, x=1330,y=1000)
         time.sleep(1)
         return
 
     if __search_image(find_another_match_highlighted, convert_region(1170, 930, 1490, 1070), screen):
-        print('pressing find_another_match_highlighted.')
+        # print('pressing find_another_match_highlighted.')
         mnk.click(active, x=1330,y=1000)
         time.sleep(1)
         return

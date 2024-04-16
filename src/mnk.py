@@ -4,7 +4,7 @@ import time
 import ctypes
 import pydirectinput
 import keyboard
-from afk import ActiveManager
+from active import ActiveManager
 import screen
 
 win32 = ctypes.windll.user32
@@ -12,72 +12,95 @@ win32 = ctypes.windll.user32
 # delay between press and release
 KEYDELAY = 0.1
 
-def __action(active: ActiveManager, function, **kwargs):
-    if active.is_active():
-        function(**kwargs)
+class MouseAndKeyboard:
+    """Control Mouse And Keyboard"""
+    def __init__(self) -> None:
+        self.__actions = []
+        self.__running = False
 
-def click(active, **kwargs):
-    """ Clicks mouse at current postion or at provided x and y.
-    Usage - click(active, x = "x", y = "y")
-    """
-    __action(active, __click, **kwargs)
-    
-def __click(**kwargs):
-    x = kwargs.get('x')
-    y = kwargs.get('y')
+    def __run(self, active: ActiveManager):
+        while len(self.__actions) > 0:
+            action = self.__actions.pop(0)
+            if active.is_active():
+                fn = action[0]
+                kwargs = action[1]
+                fn(**kwargs)
 
-    if x is not None and y is not None:
-        pydirectinput.moveTo(screen.get_res_scale_x(x), screen.get_res_scale_y(y))
+        self.__running = False
 
-    win32.mouse_event(0x0002, 0, 0, 0, 0) # Left click press
-    time.sleep(KEYDELAY)
-    win32.mouse_event(0x0004, 0, 0, 0, 0) # Left click release
+    def __action(self, active: ActiveManager, function, **kwargs):
+        self.__actions.insert(0, (function, kwargs))
 
-def keypress(active, **kwargs):
-    """ Presses given key.
-    Usage - keypress(active, key = "key")
-    """
-    __action(active, __keypress, **kwargs)
+        if not self.__running:
+            self.__running = True
+            self.__run(active)
 
-def __keypress(**kwargs):
-    key = kwargs.get('key')
+    def click(self, active, **kwargs):
+        """ Clicks mouse at current postion or at provided x and y.
+        Usage - click(active, x = "x", y = "y")
+        """
+        self.__action(active, self.__click, **kwargs)
+        
+    def __click(self, **kwargs):
+        x = kwargs.get('x')
+        y = kwargs.get('y')
 
-    if key is not None:
-        keyboard.press(key)
+        if x is not None and y is not None:
+            pydirectinput.moveTo(screen.get_res_scale_x(x), screen.get_res_scale_y(y))
+
+        win32.mouse_event(0x0002, 0, 0, 0, 0) # Left click press
         time.sleep(KEYDELAY)
-        keyboard.release(key)
+        win32.mouse_event(0x0004, 0, 0, 0, 0) # Left click release
 
-def send_text(active, **kwargs):
-    """Sends text"""
-    __action(active, __send_text, **kwargs)
+    def keypress(self, active, **kwargs):
+        """ Presses given key.
+        Usage - keypress(active, key = "key")
+        """
+        self.__action(active, self.__keypress, **kwargs)
 
-def __send_text(**kwargs):
-    text = kwargs.get('text')
+    def __keypress(self, **kwargs):
+        key = kwargs.get('key')
 
-    if text is not None:
-        keyboard.press("t")
+        if key is not None:
+            keyboard.press(key)
+            time.sleep(KEYDELAY)
+            keyboard.release(key)
+
+    def send_text(self, active, **kwargs):
+        """Sends text"""
+        self.__action(active, self.__send_text, **kwargs)
+
+    def __send_text(self, **kwargs):
+        text = kwargs.get('text')
+
+        if text is not None:
+            keyboard.press("t")
+            time.sleep(KEYDELAY)
+            keyboard.release("t")
+
+            keyboard.press("backspace")
+            time.sleep(KEYDELAY)
+            keyboard.release("backspace")
+
+            keyboard.write(text, KEYDELAY)
+
+            keyboard.press("enter")
+            time.sleep(KEYDELAY)
+            keyboard.release("enter")
+
+            keyboard.press("enter")
+            time.sleep(KEYDELAY)
+            keyboard.release("enter")
+
+    def move_mouse(self, active, **kwargs):
+        """Move mouse"""
+        self.__action(active, self.__move_mouse, **kwargs)
+
+    def __move_mouse(self, **kwargs):
+        x = kwargs.get('x')
+        y = kwargs.get('y')
+
         time.sleep(KEYDELAY)
-        keyboard.release("t")
 
-        keyboard.press("backspace")
-        time.sleep(KEYDELAY)
-        keyboard.release("backspace")
-
-        keyboard.write(text, 0.01)
-
-        keyboard.press("enter")
-        time.sleep(KEYDELAY)
-        keyboard.release("enter")
-
-def move_mouse(active, **kwargs):
-    """Move mouse"""
-    __action(active, __move_mouse, **kwargs)
-
-def __move_mouse(**kwargs):
-    x = kwargs.get('x')
-    y = kwargs.get('y')
-
-    time.sleep(KEYDELAY)
-
-    if x is not None and y is not None:
-        pydirectinput.moveTo(screen.get_res_scale_x(x), screen.get_res_scale_y(y))
+        if x is not None and y is not None:
+            pydirectinput.moveTo(screen.get_res_scale_x(x), screen.get_res_scale_y(y))

@@ -4,62 +4,39 @@ import time
 import threading
 import ctypes
 import keyboard
-import mnk
+from active import ActiveManager
+from mnk import MouseAndKeyboard
 import screen
+from config import Config
 
-VERSION = 0.02
+VERSION = 0.03
 APP_NAME = f"VeryBannable AFK bot for Rainbow Six v{str(VERSION)}"
-
-SIEGE_WINDOW_NAMES = ["Rainbow Six"]
 
 USER32 = ctypes.windll.user32
 USER32.SetProcessDPIAware() # neccesary if the user has scaling enabled in Windows
 
-class ActiveManager:
-    """Tracks whether or not the bot is active and if the window is in focus."""
-    def __init__(self) -> None:
-        self.__user_active = False
-
-    @staticmethod
-    def __window_in_focus() -> bool:
-        hwnd = USER32.GetForegroundWindow()
-        length = USER32.GetWindowTextLengthW(hwnd)
-        buf = ctypes.create_unicode_buffer(length + 1)
-        USER32.GetWindowTextW(hwnd, buf, length + 1)
-
-        window = buf.value if buf.value else None
-        in_focus = window in SIEGE_WINDOW_NAMES
-        return in_focus
-
-    def user_active(self) -> bool:
-        """Returns true if the user inputs indicate the bot bot should be running"""
-        return self.__user_active
-
-    def is_active(self) -> bool:
-        """Returns true if bot actions should be performed."""
-        if not self.__user_active:
-            return False
-
-        return ActiveManager.__window_in_focus()
-
-    def switch_active(self) -> None:
-        """Switch whether the bot is active."""
-        self.__user_active = not self.__user_active
-
-    def scrape(self):
-        screen.scrape(self)
-
+__CONFIG = Config()
+__MNK = MouseAndKeyboard()
 __ACTIVE = ActiveManager()
+
+global link_time
+link_time = time.time()
 
 def run_inputs():
     """Run the inputs."""
     while True:
         active = __ACTIVE
-        mnk.keypress(active, key = '5')
+        __MNK.keypress(active, key = '5')
 
-        mnk.move_mouse(active, x=960, y=540)
+        __MNK.move_mouse(active, x=960, y=540)
 
         time.sleep(0.5)
+
+        global link_time
+
+        if __CONFIG.spam_link and time.time() > (link_time + __CONFIG.link_delay):
+            __MNK.send_text(active, text = __CONFIG.link)
+            link_time = time.time()
 
         if not __ACTIVE.user_active():
             break
@@ -67,9 +44,12 @@ def run_inputs():
 def run_scraping():
     while True:
         active = __ACTIVE
-        active.scrape()
+        active.scrape(__MNK)
 
-class ThreadManager:
+        if not __ACTIVE.user_active():
+            break
+
+class Threads:
     """Tracks the threads that should run when the bot is on
     and joins them when they should close."""
     def __init__(self) -> None:
@@ -90,18 +70,18 @@ class ThreadManager:
         if not self.scraper_thread.is_alive():
             self.scraper_thread = threading.Thread(target=run_scraping)
 
-__THREADS = ThreadManager()
+__THREADS = Threads()
 
 def __on_press():
     """Activate/deactivate the bot when the hot key is pressed."""
     __ACTIVE.switch_active()
 
     if __ACTIVE.user_active():
-        print("Activated.")
         __THREADS.start()
+        print("Activated.")
     else:
-        print("Deactivated.")
         __THREADS.stop()
+        print("Deactivated.")
 
 if __name__ == "__main__":
     ctypes.windll.kernel32.SetConsoleTitleW(APP_NAME)
@@ -113,4 +93,7 @@ if __name__ == "__main__":
     print("Ready.")
 
     while True:
-        time.sleep(1)
+        try:
+            time.sleep(1)
+        except KeyboardInterrupt:
+            exit(1)
