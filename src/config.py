@@ -2,7 +2,7 @@ import json
 import os
 
 DEFAULT_CONFIG = {
-    "spam_link": "true",
+    "spam_link": "false",
     "link": "youtube.com/verybannable",
     "link_delay": 300
 }

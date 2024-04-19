@@ -24,7 +24,7 @@ Press F2 to start/stop the bot.
 # Configuration
 The bot generates a config.json file when first run. You can open this with any text editor (notepad works).
 Later I will add more here, but for now, it has the following:
-    spam_link - this can be "true" or "false". "false" disables text chat. "true" (default) enables posting a link in text chat every once in awhile.
+    spam_link - this can be "true" or "false". "false" (default) disables text chat. "true" enables posting a link in text chat every once in awhile.
     link - the bot will post this text in all chat if spam_link is true. default "youtube.com/verybannable".
     link_delay - how often to post the text, in seconds. default 300 (5 minutes).
 

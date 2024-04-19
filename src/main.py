@@ -9,7 +9,7 @@ from mnk import MouseAndKeyboard
 import screen
 from config import Config
 
-VERSION = 0.03
+VERSION = 0.04
 APP_NAME = f"VeryBannable AFK bot for Rainbow Six v{str(VERSION)}"
 
 USER32 = ctypes.windll.user32
