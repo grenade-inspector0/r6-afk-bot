@@ -25,7 +25,7 @@ Run main.py if you choose to use the source code.
 
 Press F2 to start/stop the bot.
 
-# CREDITS 
+# Credits 
 Made By :
 - Verybannable (youtube.com/verybannable)
 
