@@ -8,7 +8,7 @@ import threading
 from screen import scrape
 from active import ActiveManager
 from mnk import MouseAndKeyboard
-from randomness import get_coord, get_direction
+from randomness import get_coord, get_direction, get_positive_messages
 
 VERSION = 1.00
 APP_NAME = f"AFK bot for Rainbow Six v{str(VERSION)}"
@@ -20,7 +20,7 @@ __MNK = MouseAndKeyboard()
 __ACTIVE = ActiveManager()
 
 last_key = None
-last_message = time.time()
+last_message = None
 
 def run_inputs():
     """Run the inputs."""
@@ -42,6 +42,7 @@ def run_inputs():
             # press play again
             __MNK.select_button(active, x_coord=440, y_coord=213)
         elif state["queueing"]:
+            # move mouse randomly until in a game
             for x in range(random.randint(2, 5)):
                 __MNK.move_mouse(active, x=get_coord(coord_type="x"), y=get_coord(coord_type="y"))
         elif state["in_game"]:
@@ -53,11 +54,12 @@ def run_inputs():
                 __MNK.move_mouse(active, x=get_coord(coord_type="x"), y=get_coord(coord_type="y"))
 
             time.sleep(1)
-
+            
             if time.time() > (last_message + 300):
-                for x in range(3):
-                    __MNK.send_text(active, text="Good luck, have fun!")
-                    time.sleep(1.5)
+                messages = get_positive_messages()
+                for message in messages:
+                    __MNK.send_text(active, text=message)
+                    time.sleep(random.uniform(1.5, 2.5))
                 last_message = time.time()
         elif state["end_of_game"]:
             # click find another match
@@ -66,7 +68,7 @@ def run_inputs():
         if not __ACTIVE.user_active():
             break
         else:
-            time.sleep(2.5)
+            time.sleep(2.5) # this sleep timer is mainly for older computers with worse graphics, but it's also useful for the state detection
 
 class Threads:
     """Tracks the threads that should run when the bot is on
@@ -88,15 +90,19 @@ __THREADS = Threads()
 
 def __on_press():
     """Activate/deactivate the bot when the hot key is pressed."""
+    global last_message
     __ACTIVE.switch_active()
 
     if __ACTIVE.user_active():
         __THREADS.start()
+        if last_message == None:
+            last_message = time.time()
         print("Activated.")
     else:
         __THREADS.stop()
         if os.path.exists("./temp.png"):
             os.remove("./temp.png")
+        last_message = None
         print("Deactivated.")
 
 if __name__ == "__main__":
