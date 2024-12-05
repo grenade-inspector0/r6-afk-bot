@@ -1,11 +1,14 @@
 """Screen stuff"""
 
-import ctypes
-import time
-from PIL import Image
 import cv2
-from mss import mss
+import time
 import numpy
+import ctypes
+import pytesseract
+from mss import mss
+from PIL import Image, ImageGrab
+
+pytesseract.pytesseract.tesseract_cmd = r'assets/tesseract/tesseract.exe'
 
 win32 = ctypes.windll.user32
 win32.SetProcessDPIAware()
@@ -16,22 +19,8 @@ SCREEN_HEIGHT = win32.GetSystemMetrics(1)
 SCALE_WIDTH = SCREEN_WIDTH/1920 # screen width/1920
 SCALE_HEIGHT = SCREEN_HEIGHT/1080 # screen height/1080
 
-def __image(path):
-    img = cv2.imread(path)
-    i = cv2.resize(img, (0, 0), fx=SCALE_WIDTH, fy=SCALE_HEIGHT, interpolation= cv2.INTER_CUBIC)
-    return i
- 
-play_again = __image('assets/images/play_again.jpg')
-play_again_highlighted = __image('assets/images/play_again_highlighted.jpg')
-reconnect_highlighted =  __image('assets/images/reconnect_highlighted.jpg')
-reconnect =  __image('assets/images/reconnect.jpg')
-
-popup_message_highlighted =  __image('assets/images/popup_message_highlighted.jpg')     
-
-find_another_match_highlighted =  __image('assets/images/find_another_match_highlighted.jpg')
-find_another_match =  __image('assets/images/find_another_match.jpg')
-
-commend =  __image('assets/images/commend.jpg')
+coords = {"play_again": (375, 505, 174, 250), "queueing": (808, 1026, 38, 68), "find_another_match": (1261, 1465, 1002, 1033), "popup_message": (699, 965, 927, 951), "reconnect": (837, 1080, 38, 68), "reconnect_queue": (385, 530, 185, 251)}
+keywords = {"play_again": ["play again"], "queueing": ["crossplay"], "find_another_match": ["find another"], "popup_message": ["ok", "cancel", "reconnect"], "reconnect": ["reconnect"], "reconnect_queue": ["reconnect"]}
 
 def get_res_scale_x(x):
     return int(SCALE_WIDTH * x)
@@ -39,79 +28,45 @@ def get_res_scale_x(x):
 def get_res_scale_y(y):
     return int(SCALE_HEIGHT * y)
 
-def convert_region(left, top, right, bottom):
-    return (get_res_scale_x(left), get_res_scale_y(top), get_res_scale_x(right), get_res_scale_y(bottom))
+def take_screenshot(coords=None):
+    im = ImageGrab.grab(bbox=coords)
+    im.save('temp.png')
 
-def __capture_screenshot():
-    # Capture entire screen
-    with mss() as sct:
-        monitor = sct.monitors[1]
-        sct_img = sct.grab(monitor)
-        # Convert to PIL/Pillow Image
-        return Image.frombytes('RGB', sct_img.size, sct_img.bgra, 'raw', 'BGRX')
+def read_screenshot(coords_type=None, keyword=None):
+    if coords != None and keyword != None:
+        take_screenshot((get_res_scale_x(coords[coords_type][0]), get_res_scale_y(coords[coords_type][2]), get_res_scale_x(coords[coords_type][1]), get_res_scale_y(coords[coords_type][3])))
+        result = pytesseract.image_to_string(Image.open('temp.png'))
+        if keyword in result.lower():
+            return True
+        else:
+            return False
 
-def __search_image(image, region, screen):
-    img_cv = cv2.cvtColor(numpy.array(screen), cv2.COLOR_RGB2BGR)
-    res = cv2.matchTemplate(img_cv[region[1]:region[3], region[0]:region[2]], image, cv2.TM_CCOEFF_NORMED)
-    return (res >= 0.8).any()
+def scrape(mnk):
+    state = {"in_lobby": False, "queueing": False, "in_game": True, "reconnect": False, "popup": False, "end_of_game": False}
 
-def scrape(active, mnk):
-    if not active.is_active():
-        time.sleep(1)
-        return
+    state["in_lobby"] = read_screenshot("play_again", keywords["play_again"][0])
+    state["queueing"] = read_screenshot("queueing", keywords["queueing"][0])
+    state["end_of_game"] = read_screenshot("find_another_match", keywords["find_another_match"][0])
 
-    screen = __capture_screenshot()
-
-    if __search_image(play_again, convert_region(350, 150, 650, 200), screen):
-        # print('pressing play_again.')
-        mnk.click(active, x=500,y=225)
-        time.sleep(5)
-        return
-
-    if __search_image(play_again_highlighted, convert_region(340, 135, 680, 185), screen):
-        # print('pressing play_again_highlighted.')
-        mnk.click(active, x=500,y=225)
-        time.sleep(5)
-        return
-
-    if __search_image(reconnect, convert_region(350, 150, 650, 200), screen):
-        # print('pressing reconnect.')
-        mnk.click(active, x=500,y=225)
-        time.sleep(5)
-        return
-
-    if __search_image(reconnect_highlighted, convert_region(340, 135, 680, 185), screen):
-        # print('pressing reconnect_highlighted.')
-        mnk.click(active, x=500,y=225)
-        time.sleep(5)
-        return
-
-    if __search_image(popup_message_highlighted, convert_region(640, 900, 1290, 1000), screen):
-        # print('pressing popup_message_highlighted.')
-        mnk.click(active, x=950,y=950)
-        time.sleep(1)
-        return
-
-    if __search_image(commend, convert_region(1140, 880, 1500, 980), screen):
-        # print('pressing commend.')
-        mnk.click(active, x=1330,y=930)
-        time.sleep(0.5)
-        mnk.click(active, x=950,y=930)
-        time.sleep(0.5)
-        mnk.click(active, x=570,y=930)
-        time.sleep(0.5)
-        mnk.click(active, x=250,y=930)
-        time.sleep(0.5)
-        return
-
-    if __search_image(find_another_match, convert_region(1170, 930, 1490, 1070), screen):
-        # print('pressing find_another_match.')
-        mnk.click(active, x=1330,y=1000)
-        time.sleep(1)
-        return
-
-    if __search_image(find_another_match_highlighted, convert_region(1170, 930, 1490, 1070), screen):
-        # print('pressing find_another_match_highlighted.')
-        mnk.click(active, x=1330,y=1000)
-        time.sleep(1)
-        return
+    for x in range(len(keywords["popup_message"])):
+        state["popup_message"] = read_screenshot("popup_message", keywords["popup_message"][x])
+        if state["popup_message"]:
+            state["in_lobby"] = False
+            state["queueing"] = False
+            state["in_game"] = False
+            state["reconnect"] = False
+            state["end_of_game"] = False
+            return state
+    
+    state["reconnect"] = read_screenshot("reconnect", keywords["reconnect"][0])
+    if state["reconnect"]:
+        if not read_screenshot("reconnect_queue", keywords["reconnect_queue"][0]):
+            print("okay")
+            state["reconnect"] = False
+    
+    for key, value in state.items():
+        if value == True:
+            if key != "in_game":
+                state["in_game"] = False
+                break
+    return state

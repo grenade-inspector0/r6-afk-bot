@@ -2,10 +2,11 @@
 
 import time
 import ctypes
-import pydirectinput
-import keyboard
-from active import ActiveManager
+import random
 import screen
+import keyboard
+import pydirectinput
+from active import ActiveManager
 
 win32 = ctypes.windll.user32
 
@@ -24,8 +25,7 @@ class MouseAndKeyboard:
             if active.is_active():
                 fn = action[0]
                 kwargs = action[1]
-                fn(**kwargs)
-
+                fn(active=active, **kwargs)
         self.__running = False
 
     def __action(self, active: ActiveManager, function, **kwargs):
@@ -34,6 +34,13 @@ class MouseAndKeyboard:
         if not self.__running:
             self.__running = True
             self.__run(active)
+
+    def select_button(self, active, x_coord, y_coord):
+        for x in range(5):
+            x = x_coord + random.choice([1, -1])
+            y = y_coord + random.choice([1, -1])
+            self.__action(active, self.move_mouse, x=x, y=y)
+        self.__action(active, self.click, x=x_coord, y=y_coord)
 
     def click(self, active, **kwargs):
         """ Clicks mouse at current postion or at provided x and y.
@@ -63,7 +70,7 @@ class MouseAndKeyboard:
 
         if key is not None:
             keyboard.press(key)
-            time.sleep(KEYDELAY)
+            time.sleep(random.uniform(0.5, 1.5))
             keyboard.release(key)
 
     def send_text(self, active, **kwargs):

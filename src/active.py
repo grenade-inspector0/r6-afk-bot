@@ -2,7 +2,6 @@ import ctypes
 import screen
 
 USER32 = ctypes.windll.user32
-
 SIEGE_WINDOW_NAMES = ["Rainbow Six"]
 
 class ActiveManager:
@@ -35,6 +34,3 @@ class ActiveManager:
     def switch_active(self) -> None:
         """Switch whether the bot is active."""
         self.__user_active = not self.__user_active
-
-    def scrape(self, mnk):
-        screen.scrape(self, mnk)
