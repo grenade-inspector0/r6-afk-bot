@@ -15,16 +15,13 @@ def get_direction(exclude=None):
 
 def get_positive_messages(num=3, allow_duplicates=False):
     positive_messages = []
-    while True:
-        if len(messages) >= 3:
-            break
+    while len(positive_messages) < num:
+        new_message = random.choice(messages)
+        
+        if allow_duplicates:
+            positive_messages.append(new_message)
         else:
-            new_message = random.choice(messages)
-            if allow_duplicates:
+            if new_message not in positive_messages:
                 positive_messages.append(new_message)
-            else:
-                if new_message in positive_messages:
-                    continue
-                else:
-                    positive_messages.append(new_message)
+    
     return positive_messages
