@@ -8,9 +8,11 @@ This application is for afk botting Tom Clancy's Rainbow Six: Siege. The main pu
 It currently will get your reputation to 'disruptive' (the second lowest), with no text/voice abuse or friendly fire and a maxed out griefing bar.
 Griefing currently has no in-game penalties, unlike the others, so it's useful for clearing out your penalties without actually having to play the game.
 
-Requirements (In Settings -> Display):
-- Turn HUD Display Area to 100
-- Turn Menu Display Area to 100
+Requirements:
+- Change these settings (In Settings -> Display):
+  - Turn HUD Display Area to 100
+  - Turn Menu Display Area to 100
+- Download the latest tesseract installer and setup it up. (https://github.com/UB-Mannheim/tesseract/wiki)
 
 Should work with any 16:9 resolution. Won't work on ultra-wide monitors.
 
