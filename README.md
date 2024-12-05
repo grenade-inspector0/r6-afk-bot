@@ -14,8 +14,8 @@ Requirements (In Settings -> Display):
 
 Should work with any 16:9 resolution. Won't work on ultra-wide monitors.
 
-It looks on the screen for in-game buttons, namely buttons to start queue or find another game. It compares the images in the 'assets' folder with regions of the screen.
-It clicks 'ok' on pop-ups, like the common 'connection to server failed' lmao. It also commends teammates when the game ends.
+It looks on the screen for in-game buttons, namely buttons to start queue or find another game. It screenshots specific regions of your screen, then covers that screenshot to text, and finally it compares that text to keywords that are different for each region.
+It clicks 'ok' on pop-ups, like the common 'connection to server failed' lmao.
 It randomly moves the mouse and presses a random amount of the WASD keys, of which, none will repeat to repeatedly not get kicked for inactivity.
 It won't send keypresses if "Rainbow Six" isn't the current window, so you can safely alt-tab around with the bot running, and if the game crashes, it won't
 do anything with other open applications or the desktop.
