@@ -9,12 +9,14 @@ ROOT_DIR = pathlib.Path(__file__).parent.resolve()
 SRC_DIR = ROOT_DIR / "src"
 ASSETS_DIR = ROOT_DIR / "assets/tesseract"
 DIST_ASSETS_DIR = ROOT_DIR / "dist/assets/tesseract"
+ICON_PATH = ROOT_DIR / "assets" / "AFK_Bot.ico"
 
 pyinstaller.run([
     "--name=R6 AFK",
     '--onefile',
     '--console',
     '--clean',
+     f'--icon={ICON_PATH}',
     os.path.join(SRC_DIR, 'main.py'),
 ])
 
