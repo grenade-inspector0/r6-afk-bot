@@ -7,7 +7,7 @@ import ctypes
 import pytesseract
 from PIL import Image, ImageGrab
 
-pytesseract.pytesseract.tesseract_cmd = r'assets/tesseract/tesseract.exe'
+pytesseract.pytesseract.tesseract_cmd = fr'{os.path.dirname(os.getcwd())}/assets/tesseract/tesseract.exe'
 
 win32 = ctypes.windll.user32
 win32.SetProcessDPIAware()
