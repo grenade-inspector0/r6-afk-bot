@@ -5,7 +5,6 @@ import time
 import numpy
 import ctypes
 import pytesseract
-from mss import mss
 from PIL import Image, ImageGrab
 
 pytesseract.pytesseract.tesseract_cmd = r'assets/tesseract/tesseract.exe'
