@@ -107,7 +107,7 @@ def __on_press():
 
 if __name__ == "__main__":
     os.system("cls")
-    if os.path.exists(f'{os.getenv('LOCALAPPDATA')}/Programs/Tesseract-OCR/tesseract.exe'):
+    if os.path.exists(f"{os.getenv('LOCALAPPDATA')}/Programs/Tesseract-OCR/tesseract.exe"):
         ctypes.windll.kernel32.SetConsoleTitleW(APP_NAME)
         print(f'v{VERSION}')
         print(f'Resolution: {screen.SCREEN_WIDTH}x{screen.SCREEN_HEIGHT}')
