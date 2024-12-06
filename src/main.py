@@ -10,7 +10,7 @@ from active import ActiveManager
 from mnk import MouseAndKeyboard
 from randomness import get_coord, get_direction, get_positive_messages
 
-VERSION = 1.01
+VERSION = 1.02
 APP_NAME = f"AFK bot for Rainbow Six v{str(VERSION)}"
 
 USER32 = ctypes.windll.user32
