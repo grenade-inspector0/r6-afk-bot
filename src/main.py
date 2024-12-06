@@ -13,7 +13,7 @@ from randomness import get_coord, get_direction, get_positive_messages
 
 CRAPTOP = False
 
-VERSION = 1.03
+VERSION = 1.04
 APP_NAME = f"AFK Bot for Rainbow Six Siege v{str(VERSION)}"
 
 USER32 = ctypes.windll.user32
@@ -32,7 +32,7 @@ def run_inputs():
     while True:
         active = __ACTIVE
         state = scrape(__MNK)
-        if state["popup_message"]:
+        if state["ok_popup"] or state["other_popups"]:
             # accept the popup
             __MNK.select_button(active, x_coord=744, y_coord=946)
         elif state["reconnect"]:
