@@ -17,7 +17,7 @@ Requirements:
 - Change these settings (In Settings -> Display):
   - Turn HUD Display Area to 100
   - Turn Menu Display Area to 100
-- Download the latest tesseract installer from (https://github.com/UB-Mannheim/tesseract/wiki) and do the following:
+- Download the [latest tesseract installer](https://github.com/UB-Mannheim/tesseract/wiki "Latest Tesseract Installer") and do the following:
   - Click INSTALL FOR ONLY ME when asked if you want to installl for anyone on this pc or just you.
   - Make sure to install to the default directory. (Looks something like C:\Users\YOUR_USER\AppData\Local\Programs\Tesseract-OCR)
 - Make sure to ALWAYS keep a monitor plugged into the pc you're AFKing on.
