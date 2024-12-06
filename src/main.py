@@ -107,16 +107,20 @@ def __on_press():
 
 if __name__ == "__main__":
     os.system("cls")
-    ctypes.windll.kernel32.SetConsoleTitleW(APP_NAME)
-    print(f'v{VERSION}')
-    print(f'Resolution: {screen.SCREEN_WIDTH}x{screen.SCREEN_HEIGHT}')
+    if os.path.exists(f'{os.getenv('LOCALAPPDATA')}/Programs/Tesseract-OCR/tesseract.exe'):
+        ctypes.windll.kernel32.SetConsoleTitleW(APP_NAME)
+        print(f'v{VERSION}')
+        print(f'Resolution: {screen.SCREEN_WIDTH}x{screen.SCREEN_HEIGHT}')
 
-    keyboard.add_hotkey(hotkey='f2', callback=__on_press, suppress=True)
+        keyboard.add_hotkey(hotkey='f2', callback=__on_press, suppress=True)
 
-    print("Ready.")
+        print("Ready.")
 
-    while True:
-        try:
-            time.sleep(1)
-        except KeyboardInterrupt:
-            exit(1)
+        while True:
+            try:
+                time.sleep(1)
+            except KeyboardInterrupt:
+                exit(1)
+    else:
+        print("[ERROR] Tesseract.exe not found...\nTry to install it again and see if it fixes it.")
+        exit()
