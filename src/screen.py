@@ -7,7 +7,8 @@ import ctypes
 import pytesseract
 from PIL import Image, ImageGrab
 
-pytesseract.pytesseract.tesseract_cmd = fr'{os.path.dirname(os.getcwd())}/assets/tesseract/tesseract.exe'
+# default path - C:\Users\YOUR_USER\AppData\Local\Programs\Tesseract-OCR
+pytesseract.pytesseract.tesseract_cmd = fr'{os.getenv('LOCALAPPDATA')}\Programs\Tesseract-OCR\tesseract.exe'
 
 win32 = ctypes.windll.user32
 win32.SetProcessDPIAware()
