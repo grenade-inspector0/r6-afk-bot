@@ -1,4 +1,5 @@
 import os
+import sys
 import time
 import ctypes
 import random
@@ -120,7 +121,7 @@ if __name__ == "__main__":
             try:
                 time.sleep(1)
             except KeyboardInterrupt:
-                exit(1)
+                sys.exit()
     else:
         print("[ERROR] Tesseract.exe not found...\nTry to install it again and see if it fixes it.")
-        exit(1)
+        sys.exit()
