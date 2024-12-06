@@ -28,6 +28,7 @@ Should work with any 16:9 resolution. Won't work on ultra-wide monitors.
 
 # How Does it Work?
 It screenshots specific regions of your screen, then converts that screenshot to text, and finally it compares that text to keywords that are different depending on the region. After that it does certain actions based upon the state detected, such as when in a game it will randomly move the mouse and press a random amount of the WASD keys, of which, none will repeat to ensure you don't get kicked for inactivity.
+
 Some other benefits:
 - It clicks 'ok' on pop-ups, like the common 'connection to server failed' lmao.
 - It will improve your positive reputation points, which in theory, should let you teamkill more often and lead to less 2-day toxic behavior suspensions.
