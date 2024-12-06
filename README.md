@@ -12,7 +12,9 @@ Requirements:
 - Change these settings (In Settings -> Display):
   - Turn HUD Display Area to 100
   - Turn Menu Display Area to 100
-- Download the latest tesseract installer and setup it up. (https://github.com/UB-Mannheim/tesseract/wiki)
+- Download the latest tesseract installer from (https://github.com/UB-Mannheim/tesseract/wiki) and do the following:
+  - Click INSTALL FOR ONLY ME when asked if you want to installl for anyone on this pc or just you.
+  - Make sure to install to the default directory. (Looks something like C:\Users\YOUR_USER\AppData\Local\Programs\Tesseract-OCR)
 
 Should work with any 16:9 resolution. Won't work on ultra-wide monitors.
 
