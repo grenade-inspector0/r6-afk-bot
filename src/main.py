@@ -11,8 +11,10 @@ from active import ActiveManager
 from mnk import MouseAndKeyboard
 from randomness import get_coord, get_direction, get_positive_messages
 
-VERSION = 1.02
-APP_NAME = f"AFK bot for Rainbow Six v{str(VERSION)}"
+CRAPTOP = False
+
+VERSION = 1.03
+APP_NAME = f"AFK Bot for Rainbow Six Siege v{str(VERSION)}"
 
 USER32 = ctypes.windll.user32
 USER32.SetProcessDPIAware()
@@ -42,6 +44,8 @@ def run_inputs():
             __MNK.select_button(active, x_coord=132, y_coord=71)
             # press play again
             __MNK.select_button(active, x_coord=440, y_coord=213)
+            if CRAPTOP:
+                time.sleep(7.5)
         elif state["queueing"]:
             # move mouse randomly until in a game
             for x in range(random.randint(2, 5)):
