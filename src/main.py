@@ -123,4 +123,4 @@ if __name__ == "__main__":
                 exit(1)
     else:
         print("[ERROR] Tesseract.exe not found...\nTry to install it again and see if it fixes it.")
-        exit()
+        exit(1)
