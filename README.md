@@ -1,6 +1,6 @@
 # Quick Start
 - Download the latest release from [releases](https://github.com/grenade-inspector0/r6-afk-bot/releases "Releases Page")
-- Double click the r6 afk.exe to run it.
+- Double click the r6_afk.exe to run it.
 - Press F2 to start and stop.
 
 # Usage
