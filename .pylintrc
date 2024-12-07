@@ -1,2 +1,0 @@
-# pylint complains about cv2 for some reason.
-extension-pkg-whitelist=cv2
