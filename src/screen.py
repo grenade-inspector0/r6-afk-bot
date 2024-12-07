@@ -37,8 +37,6 @@ def read_screenshot(coords_type=None, keyword=None):
     if coords != None and keyword != None:
         take_screenshot((get_res_scale_x(coords[coords_type][0]), get_res_scale_y(coords[coords_type][2]), get_res_scale_x(coords[coords_type][1]), get_res_scale_y(coords[coords_type][3])))
         result = pytesseract.image_to_string(Image.open('temp.png'))
-        if coords_type == "new_match_with_squad":
-            print(result)
         if keyword in result.lower():
             return True
         else:
