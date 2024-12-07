@@ -6,7 +6,6 @@ import shutil
 import pathlib
 import PyInstaller.__main__ as pyinstaller
 
-os.system("cls")
 ROOT_DIR = pathlib.Path(__file__).parent.resolve()
 SRC_DIR = ROOT_DIR / "src"
 ICON_PATH = ROOT_DIR / "assets" / "AFK_Bot.ico"
@@ -23,6 +22,7 @@ def compile_main(name, source):
     ])
 
 while True:
+    os.system("cls")
     answer = input("Would you also like to compile the craptop version of the file? (Y/N)\n> ").lower()
     if answer in ["y", "n"]:
         compile_craptop = answer == "y"
@@ -57,7 +57,6 @@ if compile_craptop:
     compile_main("R6_AFK_Craptops", temp_main)
     temp_main.unlink()
 
-os.system("cls")
 for root, dirs, files in os.walk(ROOT_DIR):
     for dir_name in dirs:
         if dir_name == '__pycache__':
@@ -91,3 +90,5 @@ if dist_dir.exists():
 temp_main = SRC_DIR / "main_temp.py"
 if temp_main.exists():
     temp_main.unlink()
+
+os.system("cls")
