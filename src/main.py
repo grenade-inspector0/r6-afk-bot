@@ -6,14 +6,14 @@ import random
 import screen
 import keyboard
 import threading
-from screen import scrape
+from screen import detect_state
 from active import ActiveManager
 from mnk import MouseAndKeyboard
 from randomness import get_coord, get_direction, get_positive_messages
 
 CRAPTOP = False
 
-VERSION = 1.04
+VERSION = 1.05
 APP_NAME = f"AFK Bot for Rainbow Six Siege v{str(VERSION)}"
 
 USER32 = ctypes.windll.user32
@@ -31,21 +31,21 @@ def run_inputs():
     global last_message
     while True:
         active = __ACTIVE
-        state = scrape(__MNK)
-        if state["ok_popup"] or state["other_popups"]:
+        state = detect_state(__MNK)
+        if state["popup"]:
             # accept the popup
             __MNK.select_button(active, x_coord=744, y_coord=946)
         elif state["reconnect"]:
             # reconnect to the game then sleep until in the game
-            __MNK.select_button(active, x_coord=482, y_coord=215) 
-            time.sleep(10)
+            __MNK.select_button(active, x_coord=482, y_coord=215)
+            time.sleep(15) if CRAPTOP else time.sleep(10)
         elif state["in_lobby"]:
             # move mouse to the main menu
             __MNK.select_button(active, x_coord=132, y_coord=71)
+            time.sleep(4) if CRAPTOP else time.sleep(1.5)
             # press play again
             __MNK.select_button(active, x_coord=440, y_coord=213)
-            if CRAPTOP:
-                time.sleep(7.5)
+            time.sleep(7.5) if CRAPTOP else time.sleep(2)
         elif state["queueing"]:
             # move mouse randomly until in a game
             for x in range(random.randint(2, 5)):
@@ -67,8 +67,20 @@ def run_inputs():
                     time.sleep(random.uniform(1.5, 2.5))
                 last_message = time.time()
         elif state["end_of_game"]:
-            # click find another match
-            __MNK.select_button(active, x_coord=1370, y_coord=1026)
+            if state["squad_leader"]:
+                # press new match with squad if found to be in a squad as the squad leader
+                __MNK.select_button(active, x_coord=1652, y_coord=1023)
+                time.sleep(3.5) if CRAPTOP else time.sleep(2)
+                __MNK.select_button(active, x_coord=736, y_coord=985)
+            elif state["ready_up"]:
+                # press ready up if found to be in a squad, but not the squad leader
+                __MNK.select_button(active, x_coord=1677, y_coord=1027)
+                # move mouse randomly until in a game
+                for x in range(random.randint(5, 10)):
+                    __MNK.move_mouse(active, x=get_coord(coord_type="x"), y=get_coord(coord_type="y"))
+            else:
+                # press find another match if found to not be in a squad
+                __MNK.select_button(active, x_coord=1370, y_coord=1026)
 
         if not __ACTIVE.user_active():
             break
