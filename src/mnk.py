@@ -99,6 +99,21 @@ class MouseAndKeyboard:
             time.sleep(KEYDELAY)
             keyboard.release("enter")
 
+    def move_mouse_slowly(self, end_x, end_y):
+        start_x, start_y = pydirectinput.position()
+        step_x = (end_x - start_x) / 20
+        step_y = (end_y - start_y) / 20
+
+        for i in range(20):
+            new_x = int(start_x + step_x * (i + 1))
+            new_y = int(start_y + step_y * (i + 1))
+            screen_width = 1920
+            screen_height = 1080
+            new_x = min(max(new_x, 0), screen_width - 1)
+            new_y = min(max(new_y, 0), screen_height - 1)
+            pydirectinput.moveTo(new_x, new_y)
+            time.sleep(0.5 / 20)
+
     def move_mouse(self, active, **kwargs):
         """Move mouse"""
         self.__action(active, self.__move_mouse, **kwargs)
