@@ -25,19 +25,21 @@ __ACTIVE = ActiveManager()
 last_key = None
 last_message = None
 
+IS_BANNED = False
+
 def run_inputs():
     """Run the inputs."""
+    global IS_BANNED
     global last_key
     global last_message
-    while True:
+    while not IS_BANNED:
         active = __ACTIVE
         state = detect_state(active, __MNK, CRAPTOP=CRAPTOP)
         if state["banned"]:
-            __THREADS.stop()
             if os.path.exists(f"{os.environ.get('TEMP')}\\temp.png"):
                 os.remove(f"{os.environ.get('TEMP')}\\temp.png")
-            last_message = None
-            os.system("clear")
+            IS_BANNED = True
+            os.system("cls")
             print("Ban Detected.\nAFK Bot Deactivated.")
             sys.exit()
         elif state["popup"]:
