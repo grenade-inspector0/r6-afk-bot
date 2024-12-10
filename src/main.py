@@ -13,7 +13,7 @@ from randomness import get_coord, get_direction, get_positive_messages
 
 CRAPTOP = False
 
-VERSION = 1.05
+VERSION = 1.06
 APP_NAME = f"AFK Bot for Rainbow Six Siege v{str(VERSION)}"
 
 USER32 = ctypes.windll.user32
@@ -31,8 +31,16 @@ def run_inputs():
     global last_message
     while True:
         active = __ACTIVE
-        state = detect_state(__MNK)
-        if state["popup"]:
+        state = detect_state(active, __MNK, CRAPTOP=CRAPTOP)
+        if state["banned"]:
+            __THREADS.stop()
+            if os.path.exists(f"{os.environ.get('TEMP')}\\temp.png"):
+                os.remove(f"{os.environ.get('TEMP')}\\temp.png")
+            last_message = None
+            os.system("clear")
+            print("Ban Detected.\nAFK Bot Deactivated.")
+            sys.exit()
+        elif state["popup"]:
             # accept the popup
             __MNK.select_button(active, x_coord=744, y_coord=946)
         elif state["reconnect"]:
@@ -57,9 +65,7 @@ def run_inputs():
                 last_key = key
 
                 __MNK.move_mouse(active, x=get_coord(coord_type="x"), y=get_coord(coord_type="y"))
-
-            time.sleep(1)
-            
+            time.sleep(1)    
             if time.time() > (last_message + 300):
                 messages = get_positive_messages()
                 for message in messages:
@@ -117,8 +123,8 @@ def __on_press():
         print("Activated.")
     else:
         __THREADS.stop()
-        if os.path.exists("./temp.png"):
-            os.remove("./temp.png")
+        if os.path.exists(f"{os.environ.get('TEMP')}\\temp.png"):
+            os.remove(f"{os.environ.get('TEMP')}\\temp.png")
         last_message = None
         print("Deactivated.")
 
