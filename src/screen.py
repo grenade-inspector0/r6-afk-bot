@@ -94,6 +94,8 @@ def detect_state(active, mnk, CRAPTOP):
                 state["in_game"] = False
                 break
     if not state["in_game"] and not state["end_of_game"] and not state["popup"]:
+        mnk.select_button(active, x_coord=132, y_coord=71)
+        time.sleep(5.5) if CRAPTOP else time.sleep(3.5)
         if read_screenshot("new_gamemode", keywords["in_lobby"][3]) or read_screenshot("new_gamemode", keywords["in_lobby"][4]):
             state["in_lobby"] = True
             mnk.select_button(active, x_coord=132, y_coord=71)
