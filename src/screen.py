@@ -46,31 +46,11 @@ def detect_state(active, mnk, CRAPTOP):
     state = {"in_lobby": False, "queueing": False, "in_game": True, "reconnect": False, "popup": False, "end_of_game": False, "squad_leader": False, "ready_up": False, "banned": False}
 
     state["in_lobby"] = read_screenshot("play_again", keywords["in_lobby"][0])
+    
     if not state["in_lobby"]:
         if read_screenshot("banned", keywords["banned"][0]) or read_screenshot("banned", keywords["banned"][1]):
             state["banned"] = True
             return state
-        elif read_screenshot("new_gamemode", keywords["in_lobby"][3]) or read_screenshot("new_gamemode", keywords["in_lobby"][4]):
-            state["in_lobby"] = True
-            mnk.select_button(active, x_coord=132, y_coord=71)
-            time.sleep(5.5) if CRAPTOP else time.sleep(3.5)
-            mnk.select_button(active, x_coord=133, y_coord=222)
-            time.sleep(4) if CRAPTOP else time.sleep(2.5)
-            mnk.select_button(active, x_coord=404, y_coord=535)
-            time.sleep(4) if CRAPTOP else time.sleep(2.5)
-            mnk.move_mouse_slowly(1756, 535)
-            time.sleep(4) if CRAPTOP else time.sleep(2.5)
-            mnk.select_button(active, x_coord=132, y_coord=71)
-            time.sleep(5.5) if CRAPTOP else time.sleep(3.5)
-            mnk.select_button(active, x_coord=133, y_coord=222)
-            time.sleep(4) if CRAPTOP else time.sleep(2.5)
-            mnk.select_button(active, x_coord=931, y_coord=583)
-            time.sleep(4) if CRAPTOP else time.sleep(2.5)
-            mnk.move_mouse(active, x=430, y=583)
-            mnk.move_mouse_slowly(1562, 583)
-            time.sleep(4) if CRAPTOP else time.sleep(2.5)
-            mnk.select_button(active, x_coord=132, y_coord=71)
-            time.sleep(4) if CRAPTOP else time.sleep(2.5)
         elif read_screenshot("operators", keywords["in_lobby"][1]) or read_screenshot("locker", keywords["in_lobby"][2]):
             state["in_lobby"] = True
         else:
@@ -113,4 +93,26 @@ def detect_state(active, mnk, CRAPTOP):
             if key != "in_game":
                 state["in_game"] = False
                 break
+    if not state["in_game"] and not state["end_of_game"] and not state["popup"]:
+        if read_screenshot("new_gamemode", keywords["in_lobby"][3]) or read_screenshot("new_gamemode", keywords["in_lobby"][4]):
+            state["in_lobby"] = True
+            mnk.select_button(active, x_coord=132, y_coord=71)
+            time.sleep(5.5) if CRAPTOP else time.sleep(3.5)
+            mnk.select_button(active, x_coord=133, y_coord=222)
+            time.sleep(4) if CRAPTOP else time.sleep(2.5)
+            mnk.select_button(active, x_coord=404, y_coord=535)
+            time.sleep(4) if CRAPTOP else time.sleep(2.5)
+            mnk.move_mouse_slowly(1756, 535)
+            time.sleep(4) if CRAPTOP else time.sleep(2.5)
+            mnk.select_button(active, x_coord=132, y_coord=71)
+            time.sleep(5.5) if CRAPTOP else time.sleep(3.5)
+            mnk.select_button(active, x_coord=133, y_coord=222)
+            time.sleep(4) if CRAPTOP else time.sleep(2.5)
+            mnk.select_button(active, x_coord=931, y_coord=583)
+            time.sleep(4) if CRAPTOP else time.sleep(2.5)
+            mnk.move_mouse(active, x=430, y=583)
+            mnk.move_mouse_slowly(1562, 583)
+            time.sleep(4) if CRAPTOP else time.sleep(2.5)
+            mnk.select_button(active, x_coord=132, y_coord=71)
+            time.sleep(4) if CRAPTOP else time.sleep(2.5)
     return state
