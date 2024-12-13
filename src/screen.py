@@ -20,7 +20,7 @@ SCREEN_HEIGHT = win32.GetSystemMetrics(1)
 SCALE_WIDTH = SCREEN_WIDTH/1920 # screen width/1920
 SCALE_HEIGHT = SCREEN_HEIGHT/1080 # screen height/1080
 
-coords = {"play_again": (375, 505, 174, 250), "operators": (208, 318, 52, 90), "locker": (374, 450, 52, 90), "new_gamemode": (84, 441, 100, 257), "queueing": (808, 1026, 38, 68), "match_found": (862, 987, 36, 64), "end_of_game": (1261, 1465, 1002, 1033), "new_match_with_squad": (1541, 1755, 980, 1030), "ready_up": (1587, 1784, 996, 1044), "ok_popup": (692, 727, 920, 950), "other_popups": (699, 965, 927, 951), "reconnect": (837, 1080, 38, 68), "reconnect_queue": (385, 530, 185, 251), "banned": (655, 1045, 38, 68)}
+coords = {"play_again": (375, 505, 174, 250), "operators": (208, 318, 52, 90), "locker": (374, 450, 52, 90), "queueing": (808, 1026, 38, 68), "match_found": (862, 987, 36, 64), "end_of_game": (1261, 1465, 1002, 1033), "new_match_with_squad": (1541, 1755, 980, 1030), "ready_up": (1587, 1784, 996, 1044), "ok_popup": (692, 727, 920, 950), "other_popups": (699, 965, 927, 951), "reconnect": (837, 1080, 38, 68), "reconnect_queue": (385, 530, 185, 251), "banned": (655, 1045, 38, 68)}
 keywords = {"in_lobby": ["play again", "operators", "locker", "new playlist", "new event"], "queueing": ["crossplay", "match found"], "end_of_game": ["find another", "new match with", "ready to play"], "popups": ["ok", "cancel", "reconnect"], "reconnect": "reconnect", "banned": ["suspended", "banned"]}
 
 def get_res_scale_x(x):
@@ -93,28 +93,4 @@ def detect_state(active, mnk, CRAPTOP):
             if key != "in_game":
                 state["in_game"] = False
                 break
-    if not state["in_game"] and not state["end_of_game"] and not state["popup"]:
-        mnk.select_button(active, x_coord=132, y_coord=71)
-        time.sleep(5.5) if CRAPTOP else time.sleep(3.5)
-        if read_screenshot("new_gamemode", keywords["in_lobby"][3]) or read_screenshot("new_gamemode", keywords["in_lobby"][4]):
-            state["in_lobby"] = True
-            mnk.select_button(active, x_coord=132, y_coord=71)
-            time.sleep(5.5) if CRAPTOP else time.sleep(3.5)
-            mnk.select_button(active, x_coord=133, y_coord=222)
-            time.sleep(4) if CRAPTOP else time.sleep(2.5)
-            mnk.select_button(active, x_coord=404, y_coord=535)
-            time.sleep(4) if CRAPTOP else time.sleep(2.5)
-            mnk.move_mouse_slowly(1756, 535)
-            time.sleep(4) if CRAPTOP else time.sleep(2.5)
-            mnk.select_button(active, x_coord=132, y_coord=71)
-            time.sleep(5.5) if CRAPTOP else time.sleep(3.5)
-            mnk.select_button(active, x_coord=133, y_coord=222)
-            time.sleep(4) if CRAPTOP else time.sleep(2.5)
-            mnk.select_button(active, x_coord=931, y_coord=583)
-            time.sleep(4) if CRAPTOP else time.sleep(2.5)
-            mnk.move_mouse(active, x=430, y=583)
-            mnk.move_mouse_slowly(1562, 583)
-            time.sleep(4) if CRAPTOP else time.sleep(2.5)
-            mnk.select_button(active, x_coord=132, y_coord=71)
-            time.sleep(4) if CRAPTOP else time.sleep(2.5)
     return state
