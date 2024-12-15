@@ -108,3 +108,4 @@ def detect_state(active, mnk, CRAPTOP):
                 state["in_game"] = False
                 break
     return state
+
