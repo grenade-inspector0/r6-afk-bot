@@ -34,7 +34,7 @@ def take_screenshot(coords=None):
     im.save(f'{os.environ.get('TEMP')}\\temp.png')
 
 def read_screenshot(coords_type=None, keyword=None):
-    if coords != None and keyword != None:
+    if coords_type != None and keyword != None:
         take_screenshot((get_res_scale_x(coords[coords_type][0]), get_res_scale_y(coords[coords_type][2]), get_res_scale_x(coords[coords_type][1]), get_res_scale_y(coords[coords_type][3])))
         result = pytesseract.image_to_string(Image.open(f'{os.environ.get('TEMP')}\\temp.png'))
         if keyword in result.lower():
