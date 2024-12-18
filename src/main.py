@@ -13,7 +13,7 @@ from randomness import get_coord, get_direction, get_positive_messages
 
 CRAPTOP = False
 
-VERSION = 1.10
+VERSION = 1.11
 APP_NAME = f"AFK Bot for Rainbow Six Siege v{str(VERSION)}"
 
 USER32 = ctypes.windll.user32
@@ -135,7 +135,7 @@ if __name__ == "__main__":
     if os.path.exists(f"{os.getenv('LOCALAPPDATA')}/Programs/Tesseract-OCR/tesseract.exe"):
         ctypes.windll.kernel32.SetConsoleTitleW(APP_NAME)
         print(f'v{VERSION}')
-        print(f'Resolution: {screen.SCREEN_WIDTH}x{screen.SCREEN_HEIGHT}')
+        print(f'Resolution: {screen.get_res()[0]}x{screen.get_res()[1]}')
 
         keyboard.add_hotkey(hotkey='f2', callback=__on_press, suppress=True)
 
