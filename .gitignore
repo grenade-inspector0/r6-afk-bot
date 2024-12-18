@@ -10,3 +10,7 @@ dist/
 
 # Debug / Testing Python File
 test.py
+
+# Compiled versions of the AFK Bot
+R6_AFK.exe
+R6_AFK_Craptops.exe
