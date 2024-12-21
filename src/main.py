@@ -10,7 +10,7 @@ import threading
 from screen import detect_state
 from active import ActiveManager
 from mnk import MouseAndKeyboard
-from randomness import get_coord, get_direction, get_positive_messages
+from randomness import get_actions, get_coord, get_direction, get_positive_messages
 
 CRAPTOP = False
 
@@ -37,7 +37,6 @@ if config["send_positive_messages"]:
     last_message = None
 
 last_key = None
-
 IS_BANNED = False
 
 def run_inputs():
@@ -74,19 +73,42 @@ def run_inputs():
             for x in range(random.randint(2, 5)):
                 __MNK.move_mouse(active, x=get_coord(coord_type="x"), y=get_coord(coord_type="y"))
         elif state["in_game"]:
-            for x in range(random.randint(2, 5)):
-                key = get_direction(last_key if last_key != None else None)
-                __MNK.keypress(active, key=key)
-                last_key = key
+            action_list = get_actions()
+            for action in action_list:
+                match action:
+                    case "dk":
+                        key = get_direction(last_key if last_key != None else None)
+                        __MNK.keypress(active, key=key)
+                        last_key = key
+                    case "dk_shift":
+                        keyboard.press("shift")
+                        key = get_direction(last_key if last_key != None else None)
+                        __MNK.keypress(active, key=key)
+                        last_key = key
+                        keyboard.release("shift")
+                    case "mm":
+                        __MNK.move_mouse(active, x=get_coord(coord_type="x"), y=get_coord(coord_type="y"))
+                    case "mm_dk":
+                        match random.randint(1, 2):
+                            case 1:
+                                key = get_direction(last_key if last_key != None else None)
+                                __MNK.keypress(active, key=key)
+                                last_key = key
+                                __MNK.move_mouse(active, x=get_coord(coord_type="x"), y=get_coord(coord_type="y"))
+                            case 2:
+                                __MNK.move_mouse(active, x=get_coord(coord_type="x"), y=get_coord(coord_type="y"))
+                                key = get_direction(last_key if last_key != None else None)
+                                __MNK.keypress(active, key=key)
+                                last_key = key
+                time.sleep(1)
 
-                __MNK.move_mouse(active, x=get_coord(coord_type="x"), y=get_coord(coord_type="y"))
-            time.sleep(1)
             if config["send_positive_messages"]:
                 if time.time() > (last_message + 300):
-                    messages = get_positive_messages()
-                    for message in messages:
-                        __MNK.send_text(active, text=message)
-                        time.sleep(random.uniform(1.5, 2.5))
+                    if random.choice([1, 2, 2]) == 1:
+                        messages = get_positive_messages()
+                        for message in messages:
+                            __MNK.send_text(active, text=message)
+                            time.sleep(random.uniform(1.5, 2.5))
                     last_message = time.time()
         elif state["end_of_game"]:
             if state["squad_leader"]:

@@ -70,7 +70,7 @@ class MouseAndKeyboard:
 
         if key is not None:
             keyboard.press(key)
-            time.sleep(random.uniform(0.5, 1.5))
+            time.sleep(random.uniform(0.75, 1.5))
             keyboard.release(key)
 
     def send_text(self, active, **kwargs):
