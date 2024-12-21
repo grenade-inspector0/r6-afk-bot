@@ -1,5 +1,6 @@
 import os
 import sys
+import json
 import time
 import ctypes
 import random
@@ -13,7 +14,7 @@ from randomness import get_coord, get_direction, get_positive_messages
 
 CRAPTOP = False
 
-VERSION = 1.11
+VERSION = 1.12
 APP_NAME = f"AFK Bot for Rainbow Six Siege v{str(VERSION)}"
 
 USER32 = ctypes.windll.user32
@@ -22,8 +23,20 @@ USER32.SetProcessDPIAware()
 __MNK = MouseAndKeyboard()
 __ACTIVE = ActiveManager()
 
+if not os.path.exists("./config.json"):
+    config_data = {
+        "send_positive_messages": True,
+    }
+    with open("./config.json", "w") as f:
+        json.dump(config_data, f, indent=5)
+
+with open("./config.json", "r") as f:
+    config = json.load(f)
+
+if config["send_positive_messages"]:
+    last_message = None
+
 last_key = None
-last_message = None
 
 IS_BANNED = False
 
@@ -67,13 +80,14 @@ def run_inputs():
                 last_key = key
 
                 __MNK.move_mouse(active, x=get_coord(coord_type="x"), y=get_coord(coord_type="y"))
-            time.sleep(1)    
-            if time.time() > (last_message + 300):
-                messages = get_positive_messages()
-                for message in messages:
-                    __MNK.send_text(active, text=message)
-                    time.sleep(random.uniform(1.5, 2.5))
-                last_message = time.time()
+            time.sleep(1)
+            if config["send_positive_messages"]:
+                if time.time() > (last_message + 300):
+                    messages = get_positive_messages()
+                    for message in messages:
+                        __MNK.send_text(active, text=message)
+                        time.sleep(random.uniform(1.5, 2.5))
+                    last_message = time.time()
         elif state["end_of_game"]:
             if state["squad_leader"]:
                 # press new match with squad if found to be in a squad as the squad leader
