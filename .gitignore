@@ -8,8 +8,9 @@ __pycache__/
 build/
 dist/
 
-# Debug / Testing Python File
+# Debug / Testing Files
 test.py
+config.json
 
 # Compiled versions of the AFK Bot
 R6_AFK.exe
