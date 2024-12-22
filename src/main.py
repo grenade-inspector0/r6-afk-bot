@@ -102,8 +102,8 @@ def run_inputs():
                 time.sleep(1)
 
             if config["send_positive_messages"]:
-                if time.time() > (last_message + 300):
-                    if random.choice([1, 2, 2]) == 1:
+                if time.time() > (last_message + 450): # every 7.5 minutes the bot has a chance to send 3 randomly selected positive messages
+                    if random.choice([1, 2, 2]) == 2: # has a 66% chance to send 3 positive messages 
                         messages = get_positive_messages()
                         for message in messages:
                             __MNK.send_text(active, text=message)
