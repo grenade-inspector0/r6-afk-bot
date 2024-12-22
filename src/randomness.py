@@ -33,7 +33,7 @@ def get_direction(exclude=None):
 def get_actions():
     actions = []
     for x in range(random.randint(random.randint(3, 5), random.randint(6, 8))):
-        match random.randint(1, 4):
+        match random.randint(1, 5):
             case 1:
                 actions.append("dk") # directional key
             case 2:
@@ -42,4 +42,7 @@ def get_actions():
                 actions.append("mm") # mousement movement
             case 4:
                 actions.append("mm_dk") # mousement movement + directional key
+            case 5:
+                for x in range(random.randint(1, 3)):
+                    actions.append(random.choice(["dk", "dk_shift", "mm", "mm_dk"]))
     return actions
