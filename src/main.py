@@ -14,7 +14,7 @@ from randomness import get_actions, get_coord, get_direction, get_positive_messa
 
 CRAPTOP = False
 
-VERSION = 1.12
+VERSION = 1.13
 APP_NAME = f"AFK Bot for Rainbow Six Siege v{str(VERSION)}"
 
 USER32 = ctypes.windll.user32
@@ -182,5 +182,5 @@ if __name__ == "__main__":
             except KeyboardInterrupt:
                 sys.exit()
     else:
-        print("[ERROR] Tesseract.exe not found...\nTry to install it again and see if it fixes it.")
+        print("[ERROR] Tesseract.exe not found...\nInstall tesseract again using the instructions from the github, then try to run the AFK Bot again.")
         sys.exit()
