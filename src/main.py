@@ -23,16 +23,6 @@ USER32.SetProcessDPIAware()
 __MNK = MouseAndKeyboard()
 __ACTIVE = ActiveManager()
 
-if not os.path.exists("./config.json"):
-    config_data = {
-        "send_positive_messages": True,
-    }
-    with open("./config.json", "w") as f:
-        json.dump(config_data, f, indent=5)
-
-with open("./config.json", "r") as f:
-    config = json.load(f)
-
 last_key = None
 last_message = None
 
@@ -101,9 +91,9 @@ def run_inputs():
                                 last_key = key
                 time.sleep(1)
 
-            if config["send_positive_messages"]:
-                if time.time() > (last_message + 450): # every 7.5 minutes the bot has a chance to send 3 randomly selected positive messages
-                    if random.choice([1, 2, 2]) == 2: # has a 66% chance to send 3 positive messages 
+            if config["Messages"]["send_positive_messages"]:
+                if time.time() > (last_message + config["Messages"]["message_delay"]): # every 7.5 minutes the bot has a chance to send 3 randomly selected positive messages
+                    if random.choice([1, 2, 2]) == 2:                                  # has a 66% chance to send 3 positive messages 
                         messages = get_positive_messages()
                         for message in messages:
                             __MNK.send_text(active, text=message)
@@ -169,8 +159,25 @@ if __name__ == "__main__":
     os.system("cls")
     if os.path.exists(f"{os.getenv('LOCALAPPDATA')}/Programs/Tesseract-OCR/tesseract.exe"):
         ctypes.windll.kernel32.SetConsoleTitleW(APP_NAME)
+        if not os.path.exists("./config.json"):
+            config_data = {
+                "Messages": {
+                    "send_positive_messages": True,
+                    "message_delay": 450
+                }
+            }
+            with open("./config.json", "w") as f:
+                json.dump(config_data, f, indent=5)
+
+        with open("./config.json", "r") as f:
+            config = json.load(f)
+
+        if not isinstance(config["Messages"]["message_delay"], int):
+            print("[ERROR] The variable 'message_delay' within the config file isn't an integer.")
+            sys.exit()
+
         print(f'v{VERSION}')
-        print(f'Resolution: {screen.get_res()[0]}x{screen.get_res()[1]}')
+        print(f'Resolution: {screen.SCREEN_WIDTH}x{screen.SCREEN_HEIGHT}')
 
         keyboard.add_hotkey(hotkey='f2', callback=__on_press, suppress=True)
 
