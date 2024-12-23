@@ -44,7 +44,7 @@ Edited By :
 - Grenade Inspector 
 
 # SUBSCRIBE ALREADY
-youtube.com/verybannable
+[youtube.com/verybannable](https://www.youtube.com/@VeryBannable "VeryBannable")
 
 # Disclaimer
 If you get banned, it's your fault. Get owned. Loser. 
